@@ -1,0 +1,11 @@
+@host=https://localhost:7005
+
+POST {{host}}/auth/signup
+Content-Type: application/json
+
+{
+    "Name": "Aroldo Lenon Jales dos Santos",    
+    "Email": "aroldo@email.com",
+    "PhoneNumber": "86994899576",
+    "Password": "Passwd#FooBar42"
+}

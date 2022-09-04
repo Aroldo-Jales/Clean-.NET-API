@@ -1,0 +1,10 @@
+@host=https://localhost:7005
+# change to environment variables
+
+POST {{host}}/auth/signin
+Content-Type: application/json
+
+{    
+    "email": "aroldo@email.com",
+    "password": "Passwd#FooBar42"
+}
