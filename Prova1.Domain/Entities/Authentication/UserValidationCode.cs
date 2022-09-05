@@ -21,6 +21,7 @@ namespace Prova1.Domain.Entities.Authentication
             get {
                 Random RandNum = new Random();
                 int number = RandNum.Next(100000, 999999);
+                
 
                 Console.WriteLine("Codigo de confirmacao para: "+Type+" = "+number);
 

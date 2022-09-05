@@ -11,10 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
 }
 
 var app = builder.Build();
-{
-    app.UseMiddleware<ErrorHandlingMiddleware>();
+{   
 
     app.UseHttpsRedirection();
+
+    app.UseAuthentication(); // jwt bearer validation
+    app.UseAuthorization(); // user can acess endpoints
+
+    app.UseMiddleware<ErrorHandlingMiddleware>();
+
     app.MapControllers();
     app.Run();
 }

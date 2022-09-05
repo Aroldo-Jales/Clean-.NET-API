@@ -1,0 +1,9 @@
+@host=https://localhost:7005
+
+POST {{host}}/auth/phone-number-confirmation
+Content-Type: application/json
+
+{    
+    "userId": "",
+    "code": ""
+}

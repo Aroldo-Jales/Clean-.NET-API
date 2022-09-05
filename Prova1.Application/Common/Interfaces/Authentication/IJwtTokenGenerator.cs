@@ -4,6 +4,7 @@ namespace Prova1.Application.Common.Interfaces.Authentication
 {
     public interface IJwtTokenGenerator
     {
-        string GenerateToken(User user);
+        string GenerateJwtToken(User user);
+        string GenerateRefreshJwtToken(User user);
     }
 }

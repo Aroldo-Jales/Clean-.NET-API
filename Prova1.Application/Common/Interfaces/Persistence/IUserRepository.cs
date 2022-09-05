@@ -5,8 +5,9 @@ namespace Prova1.Application.Common.Interfaces.Persistence
     public interface IUserRepository
     {
         Task Add(User user);
-        Task Update(User user);
+        Task<User> Update(User user);
         Task<User?> GetUserByEmail(string email);
+        Task<bool> UserPhoneNumberAlreadyExist(string phoneNumber);
         Task<User?> GetUserById(Guid id);
     }
 }

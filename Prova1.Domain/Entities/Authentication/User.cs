@@ -18,7 +18,7 @@ namespace Prova1.Domain.Entities.Authentication
         public string Name { get; set; } = null!;
 
         [MaxLength(50)]
-        public string Email { get; set; } = null!;
+        public string Email { get; set; } = null!;        
 
         [MaxLength(11)]        
         public string? PhoneNumber { get; set; }      

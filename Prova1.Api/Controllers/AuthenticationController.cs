@@ -1,79 +1,134 @@
 using Microsoft.AspNetCore.Mvc;
-using Prova1.Contracts.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Prova1.Contracts.Authentication.Request;
+using Prova1.Contracts.Authentication.Response;
 using Prova1.Application.Services.Authentication;
 
-namespace Prova1.Api.Controllers;
+namespace Prova1.Api.Controllers{
 
-[ApiController]
-[Route("auth")]
-public class AuthenticationController : ControllerBase
-{    
+    [ApiController]
+    [Route("auth")]
+    [AllowAnonymous]
+    public class AuthenticationController : ControllerBase
+    {    
 
-    private readonly IAuthenticationService _authenticationService;
+        private readonly IAuthenticationService _authenticationService;
 
-    
-    public AuthenticationController(IAuthenticationService authenticationService)
-    {
-        _authenticationService = authenticationService;
-    }
-
-    [HttpPost("signup")]
-    public async Task<IActionResult> SignUp(SignUpRequest request)
-    {
-        var userInactiveResult = await _authenticationService.SignUp(
-            request.Name,            
-            request.Email,
-            request.PhoneNumber,
-            request.Password
-        );
-
-        var response = new UserInactiveResponse
-        (
-            userInactiveResult.user.Id,
-            userInactiveResult.user.Name,
-            userInactiveResult.user.Email,
-            userInactiveResult.user.ActiveAccount
-        );
-
-        return Ok(response);
-    }
-
-    [HttpPost("signin")]   
-    public async Task<IActionResult> SignIn(SignInRequest request)
-    {
-        var authResult = await _authenticationService.SignIn(            
-            request.Email,
-            request.Password
-        );
-
-        var response = new AuthenticationResponse
-        (
-            authResult.user.Id,
-            authResult.user.Name,
-            authResult.user.Email,
-            authResult.user.PhoneNumber!,            
-            authResult.Token
-        );
         
-        return Ok(response);
-    }
+        public AuthenticationController(IAuthenticationService authenticationService)
+        {
+            _authenticationService = authenticationService;
+        }
 
-    [HttpPost("change-password")]
-    public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
-    {
-         var authResult = await _authenticationService.ChangePassword(            
-            Guid.Parse(request.Id),
-            request.NewPassword
-        );    
+        [HttpPost("signup")]
+        public async Task<IActionResult> SignUp(SignUpRequest request)
+        {
+            var userInactiveResult = await _authenticationService.SignUp(
+                request.Name,            
+                request.Email,            
+                request.Password
+            );
 
-        var response = new AuthenticationResponse
-        (
-            authResult.user.Id,
-            authResult.user.Name,
-            authResult.user.Email,
-            authResult.user.PhoneNumber!,
-            authResult.Token
-        );
-        return Ok(response);
+            var response = new UserStatusResponse
+            (
+                userInactiveResult.user.Id,
+                userInactiveResult.user.Name,
+                userInactiveResult.user.Email,
+                userInactiveResult.user.ActiveAccount
+            );
+
+            return Ok(response);
+        }
+
+        [HttpGet("signin")]   
+        public async Task<IActionResult> SignIn(SignInRequest request)
+        {
+            var authServiceResult = await _authenticationService.SignIn(            
+                request.Email,
+                request.Password
+            );
+
+            var response = new AuthenticationResponse
+            (
+                authServiceResult.user.Id,
+                authServiceResult.user.Name,
+                authServiceResult.user.Email,
+                authServiceResult.user.PhoneNumber!,            
+                authServiceResult.AcessToken,
+                authServiceResult.RefreshToken
+            );
+            
+            return Ok(response);
+        }
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
+        {
+            var authServiceResult = await _authenticationService.ChangePassword(            
+                Guid.Parse(request.userId),
+                request.NewPassword
+            );    
+
+            var response = new AuthenticationResponse
+            (
+                authServiceResult.user.Id,
+                authServiceResult.user.Name,
+                authServiceResult.user.Email,
+                authServiceResult.user.PhoneNumber!,
+                authServiceResult.AcessToken,
+                authServiceResult.RefreshToken
+            );
+            return Ok(response);
+        }
+
+        [HttpPost("email-confirmation")]
+        public async Task<IActionResult> EmailConfirmation(ConfirmationRequest request)
+        {
+            var authServiceResult = await _authenticationService.ConfirmEmail(
+                Guid.Parse(request.userId),
+                request.code
+            );
+
+            var response = new UserStatusResponse
+            (
+                authServiceResult.user.Id,
+                authServiceResult.user.Name,
+                authServiceResult.user.Email,
+                authServiceResult.user.ActiveAccount
+            );
+            
+            return Ok(response);
+        }
+
+        [HttpPost("add-phone-number")]
+        public async Task<IActionResult> AddPhoneNumber(AddPhoneNumberRequest request)
+        {
+            await _authenticationService.AddPhoneNumber(
+                Guid.Parse(request.userId),
+                request.phoneNumber
+            );
+            
+            return Ok("Phonenumber registered for confirmation.");
+        }
+
+        [HttpPost("phone-number-confirmation")]
+        public async Task<IActionResult> PhoneNumberConfirmation(ConfirmationRequest request)
+        {
+            var authServiceResult = await _authenticationService.ConfirmPhoneNumber(
+                Guid.Parse(request.userId),
+                request.code
+            );
+
+            var response = new UserStatusResponse
+            (
+                authServiceResult.user.Id,
+                authServiceResult.user.Name,
+                authServiceResult.user.Email,
+                authServiceResult.user.ActiveAccount
+            );
+            
+            return Ok(response);
+        }
     }
 }
+

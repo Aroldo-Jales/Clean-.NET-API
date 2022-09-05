@@ -1,4 +1,4 @@
-namespace Prova1.Contracts.Authentication;
+namespace Prova1.Contracts.Authentication.Request;
 
 public record SignInRequest(    
     string Email,

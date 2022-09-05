@@ -3,7 +3,7 @@ using Prova1.Domain.Entities.Authentication;
 using Prova1.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Prova1.Infrastructure.Persistence
+namespace Prova1.Infrastructure.Repositories
 {    
     public class UserRepository : IUserRepository
     {
@@ -20,7 +20,7 @@ namespace Prova1.Infrastructure.Persistence
             await _dbcontext.SaveChangesAsync();       
         }
 
-        public async Task Update(User user)
+        public async Task<User> Update(User user)
         {
             User updateUser = _dbcontext.Users!.SingleOrDefault(u => u == user)!;
 
@@ -31,16 +31,23 @@ namespace Prova1.Infrastructure.Persistence
             updateUser.ActiveAccount = user.ActiveAccount;
 
             await _dbcontext.SaveChangesAsync();
+
+            return updateUser;
         }
         
         public async Task<User?> GetUserByEmail(string email)
         {                        
-            return await (_dbcontext.Users!.Where(user => user.Email == email).SingleOrDefaultAsync<User>());            
-        }
+            return await _dbcontext.Users!.Where(user => user.Email == email).SingleOrDefaultAsync();            
+        }        
 
+        public async Task<bool> UserPhoneNumberAlreadyExist(string phoneNumber)
+        {
+            return await _dbcontext.Users!.AnyAsync(user => user.PhoneNumber == phoneNumber);
+        }
+        
         public async Task<User?> GetUserById(Guid id)
         {
-            return await (_dbcontext.Users!.Where(user => user.Id == id).SingleOrDefaultAsync<User>());            
-        }
+            return await _dbcontext.Users!.Where(user => user.Id == id).SingleOrDefaultAsync();            
+        }        
     }
 }
