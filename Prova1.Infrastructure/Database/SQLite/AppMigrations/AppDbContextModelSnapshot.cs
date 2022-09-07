@@ -17,6 +17,40 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.8");
 
+            modelBuilder.Entity("Prova1.Domain.Entities.Authentication.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Device")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Iat")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("Prova1.Domain.Entities.Authentication.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -69,12 +103,39 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserValidationCode");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserValidationCodes");
+                });
+
+            modelBuilder.Entity("Prova1.Domain.Entities.Authentication.RefreshToken", b =>
+                {
+                    b.HasOne("Prova1.Domain.Entities.Authentication.User", null)
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prova1.Domain.Entities.Authentication.UserValidationCode", b =>
+                {
+                    b.HasOne("Prova1.Domain.Entities.Authentication.User", null)
+                        .WithMany("UserValidationCodes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prova1.Domain.Entities.Authentication.User", b =>
+                {
+                    b.Navigation("RefreshTokens");
+
+                    b.Navigation("UserValidationCodes");
                 });
 #pragma warning restore 612, 618
         }

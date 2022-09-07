@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Prova1.Contracts.Authentication.Request;
 using Prova1.Contracts.Authentication.Response;
+using Prova1.Application.Common.Interfaces.Services;
 using Prova1.Application.Services.Authentication;
 
 namespace Prova1.Api.Controllers{

@@ -1,18 +1,19 @@
 using Prova1.Application.Helpers.Authentication;
 using Prova1.Application.Common.Interfaces.Authentication;
 using Prova1.Application.Common.Interfaces.Persistence;
-using Prova1.Domain.Entities.Authentication;
 using Prova1.Application.Services.Authentication.Result;
+using Prova1.Application.Common.Interfaces.Services;
+using Prova1.Domain.Entities.Authentication;
 using System.Transactions;
 
 namespace Prova1.Application.Services.Authentication;
 
 public class AuthenticationService : IAuthenticationService
 {   
-    private readonly IJwtTokenGenerator _jwtTokenGenerator; 
+    private readonly ITokensUtils _jwtTokenGenerator; 
     private readonly IUserRepository _userRepository;
     private readonly IUserValidationCodeRepository _userValidationCodeRepository;
-    public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository, IUserValidationCodeRepository userValidationCodeRepository)
+    public AuthenticationService(ITokensUtils jwtTokenGenerator, IUserRepository userRepository, IUserValidationCodeRepository userValidationCodeRepository)
     {
         _jwtTokenGenerator = jwtTokenGenerator;
         _userRepository = userRepository;
@@ -21,17 +22,17 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<AuthenticationResult> SignIn(string email, string password)
     {            
-        // Change implementation to uses hash email+password in database
-
         if(await _userRepository.GetUserByEmail(email) is User user && user.PasswordHash == Crypto.ReturnUserHash(user, password))
         {
+            // Gerar tokens novos
+            
             var acessToken = _jwtTokenGenerator.GenerateJwtToken(user);
-            var refreshToken = _jwtTokenGenerator.GenerateRefreshJwtToken(user);
+            var refreshToken = _jwtTokenGenerator.GenerateRefreshToken(user);
 
             return new AuthenticationResult(
                 user,          
                 acessToken,
-                refreshToken
+                refreshToken.Token
             );
         }
         else
@@ -92,12 +93,12 @@ public class AuthenticationService : IAuthenticationService
                 user.PasswordHash = Crypto.ReturnUserHash(user, password);                
                 
                 var acessToken = _jwtTokenGenerator.GenerateJwtToken(user);
-                var refreshToken = _jwtTokenGenerator.GenerateRefreshJwtToken(user);
+                var refreshToken = _jwtTokenGenerator.GenerateRefreshToken(user);
 
                 return new AuthenticationResult(
                     await _userRepository.Update(user),             
                     acessToken,
-                    refreshToken
+                    refreshToken.Token
                 );
             }
             else
@@ -114,7 +115,7 @@ public class AuthenticationService : IAuthenticationService
     public async Task<UserStatusResult> ConfirmEmail(Guid userId, int code)
     {            
         // Refatorar validacao em service 
-        if(await _userValidationCodeRepository.GetEmailValidationCodeByUserId(userId) is UserValidationCode uv)
+        if(await _userValidationCodeRepository.GetEmailValidationCodeByUser((await _userRepository.GetUserById(userId))!) is UserValidationCode uv)
         {              
             if(uv.Expiration > DateTime.Now)
             {
@@ -151,7 +152,10 @@ public class AuthenticationService : IAuthenticationService
     {
         if(!await _userRepository.UserPhoneNumberAlreadyExist(phoneNumber))         
         {
-            var uvPhoneNumber = new UserValidationCode(userId, phoneNumber);                
+            User user = (await _userRepository.GetUserById(userId))!;
+
+            var uvPhoneNumber = new UserValidationCode(user.Id, phoneNumber);     
+                       
             await _userValidationCodeRepository.Add(uvPhoneNumber);            
         }
         else
@@ -162,7 +166,7 @@ public class AuthenticationService : IAuthenticationService
     
     public async Task<UserStatusResult> ConfirmPhoneNumber(Guid userId, int code)
     {
-        if(await _userValidationCodeRepository.GetPhoneNumberValidationCodeByUserId(userId) is UserValidationCode uv)
+        if(await _userValidationCodeRepository.GetPhoneNumberValidationCodeByUser((await _userRepository.GetUserById(userId))!) is UserValidationCode uv)
         {
             if(uv.Expiration > DateTime.Now)
             {                

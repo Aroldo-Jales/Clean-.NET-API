@@ -5,8 +5,8 @@ namespace Prova1.Application.Common.Interfaces.Persistence
     public interface IUserValidationCodeRepository
     {
         Task Add(UserValidationCode userValidationCode);
-        Task<UserValidationCode?> GetEmailValidationCodeByUserId(Guid userId);
-        Task<UserValidationCode?> GetPhoneNumberValidationCodeByUserId(Guid userId);
+        Task<UserValidationCode?> GetEmailValidationCodeByUser(User user);
+        Task<UserValidationCode?> GetPhoneNumberValidationCodeByUser(User user);
         Task RemoveUserConfirmation(UserValidationCode userValidationCode);        
         Task RenewCode(UserValidationCode userValidationCode);
     }

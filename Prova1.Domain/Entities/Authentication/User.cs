@@ -28,5 +28,11 @@ namespace Prova1.Domain.Entities.Authentication
         public byte[] Salt { get; set; } = null!;
 
         public bool ActiveAccount { get; set; } = false;
+
+        public ICollection<RefreshToken>? RefreshTokens { get; set; }
+
+        public int DeviceLimit { get; } = 4;
+
+        public ICollection<UserValidationCode>? UserValidationCodes { get; set; }
     }
 }

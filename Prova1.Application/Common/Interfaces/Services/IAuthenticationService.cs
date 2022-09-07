@@ -1,6 +1,6 @@
 using Prova1.Application.Services.Authentication.Result;
 
-namespace Prova1.Application.Services.Authentication;
+namespace Prova1.Application.Common.Interfaces.Services;
 public interface IAuthenticationService
 {
     Task<AuthenticationResult> SignIn(string email, string password);
