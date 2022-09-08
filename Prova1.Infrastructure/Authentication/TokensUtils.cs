@@ -22,22 +22,16 @@ namespace Prova1.Infrastructure.Authentication
         }
 
         public string GenerateJwtToken(User user, ClaimsPrincipal? claimsPrincipal = null)
-        {
-            JwtSecurityToken securityToken;
+        {           
 
-            SigningCredentials? signingCredentials = new Microsoft.IdentityModel.Tokens.SigningCredentials(
+            SigningCredentials signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
                     SecurityAlgorithms.HmacSha256
             );
 
-            string iat = DateTime.Now.ToString();
-
-            if (claimsPrincipal is not null)
-            {
-                iat = claimsPrincipal.Claims.First(claim => claim.Type == "iat").Value;
-            }
-
+            string iat = claimsPrincipal is not null ? 
+                claimsPrincipal.Claims.First(claim => claim.Type == "iat").Value : _datetimeprovider.UtcNow.ToString();
             
             Claim[]? claims = new[]
             {
@@ -47,7 +41,7 @@ namespace Prova1.Infrastructure.Authentication
                 new Claim(JwtRegisteredClaimNames.Iat, iat)
             };
 
-            securityToken = new JwtSecurityToken(
+            var securityToken = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 expires: _datetimeprovider.UtcNow.AddHours(2),
@@ -60,12 +54,8 @@ namespace Prova1.Infrastructure.Authentication
 
         public RefreshToken GenerateRefreshToken(User user, ClaimsPrincipal? claimsPrincipal = null)
         {
-            string iat = DateTime.Now.ToString();
-
-            if (claimsPrincipal is not null)
-            {
-                iat = claimsPrincipal.Claims.First(claim => claim.Type == "iat").Value;
-            }
+            string iat = claimsPrincipal is not null ?
+                claimsPrincipal.Claims.First(claim => claim.Type == "iat").Value : _datetimeprovider.UtcNow.ToString();
 
             RefreshToken? refreshToken = new RefreshToken(
                 userId: user.Id,
@@ -80,7 +70,7 @@ namespace Prova1.Infrastructure.Authentication
 
             string getUniqueToken()
             {
-                string? token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+                string token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
                 return token;
             }
         }
