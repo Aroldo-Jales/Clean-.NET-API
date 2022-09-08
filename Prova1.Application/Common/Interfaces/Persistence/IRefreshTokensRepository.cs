@@ -15,5 +15,7 @@ namespace Prova1.Application.Common.Interfaces.Persistence
         Task<RefreshToken?> GetByToken(string token);
 
         Task RevokeAllTokensFromUser(Guid userId);
+
+        Task<bool> ValidateIatToken(Guid userId, string iat);
     }
 }

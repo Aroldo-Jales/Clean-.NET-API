@@ -1,6 +1,7 @@
 using Prova1.Application.Common.Interfaces.Authentication;
-using Prova1.Application.Common.Interfaces.Services;
-
+using Prova1.Application.Common.Interfaces.Persistence;
+using Prova1.Infrastructure.Repositories;
+using Prova1.Domain.Entities.Authentication;
 namespace Prova1.Api.Middlewares
 {
     public class JwtAuthMiddleware
@@ -12,17 +13,24 @@ namespace Prova1.Api.Middlewares
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, IUserService userService, ITokensUtils tokensUtils)
+        public async Task Invoke(HttpContext context, IUserRepository userRepository, IRefreshTokenRepository tokenRepository,ITokensUtils tokensUtils)
         {
             string? token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             Guid? userId = tokensUtils.ValidateJwtToken(token!);
 
-            if (userId != null)
-            {
-                context.User = tokensUtils.ExtractClaimsFromToken(token!);
-
-                await _next(context);
+            if (userId is not null)
+            {                
+                if (await userRepository.GetUserById(userId.Value) is User user && 
+                    await tokenRepository.ValidateIatToken(user.Id, token!))
+                {
+                    context.User = tokensUtils.ExtractClaimsFromToken(token!);
+                    await _next(context);
+                }                                        
+                else
+                {
+                    throw new UnauthorizedAccessException("Expired, invalid or revoked token.");
+                }
             }
             else
             {

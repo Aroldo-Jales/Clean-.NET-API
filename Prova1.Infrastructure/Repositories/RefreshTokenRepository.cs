@@ -15,9 +15,19 @@ namespace Prova1.Infrastructure.Repositories
         }
 
         public async Task Add(RefreshToken rf)
-        {
-            await _dbcontext.RefreshTokens!.AddAsync(rf);
-            await _dbcontext.SaveChangesAsync();
+        {// se nao existir no banco adiciona o token se existir atualiza.            
+
+            // posteriormente alterar para mais dispositivos podendo ter mais de um token por usuario
+
+            if(await _dbcontext.RefreshTokens!.Where(r => r.UserId == rf.UserId).AnyAsync())
+            {
+                await Update(rf);
+            }
+            else
+            {
+                await _dbcontext.RefreshTokens!.AddAsync(rf);                
+            }   
+            await _dbcontext.SaveChangesAsync();             
         }        
 
         public async Task<RefreshToken> Update(RefreshToken rf)
@@ -58,6 +68,11 @@ namespace Prova1.Infrastructure.Repositories
             IEnumerable<RefreshToken> list = await GetAllUsersRefreshTokens(userId);
             _dbcontext.RemoveRange(list);
             await _dbcontext.SaveChangesAsync();
+        }
+
+        public async Task<bool> ValidateIatToken(Guid userId, string iat)
+        {
+            return await _dbcontext.RefreshTokens!.Where(r => r.UserId == userId && r.Iat == iat).AnyAsync();
         }
     }
 }

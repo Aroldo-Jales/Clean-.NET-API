@@ -30,6 +30,7 @@ public class AuthenticationService : IAuthenticationService
         {
             string? accessToken = _tokensUtils.GenerateJwtToken(user);
             ClaimsPrincipal claimsPrincipal = _tokensUtils.ExtractClaimsFromToken(accessToken);
+            
             RefreshToken? refreshToken = _tokensUtils.GenerateRefreshToken(user, claimsPrincipal);
 
             await _refreshTokensRepository.Add(refreshToken);
