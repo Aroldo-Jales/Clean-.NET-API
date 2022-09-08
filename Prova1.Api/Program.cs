@@ -20,7 +20,7 @@ WebApplication? app = builder.Build();
 
     app.UseWhen(context => context.Request.Path.StartsWithSegments("/readings"), appBuilder =>
     {
-        appBuilder.UseMiddleware<JwtAuthMiddleware>();
+        appBuilder.UseMiddleware<AuthMiddleware>();
 
     });
 
