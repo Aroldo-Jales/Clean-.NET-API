@@ -30,9 +30,9 @@ public class ErrorHandlingMiddleware
 
     private static Task HandleUnauthorizedAccessException(HttpContext context, Exception exception)
     {
-        var code = HttpStatusCode.Unauthorized;
+        HttpStatusCode code = HttpStatusCode.Unauthorized;
 
-        var result = JsonSerializer.Serialize(new
+        string? result = JsonSerializer.Serialize(new
         {
             title = "Unauthorized Access",
             type = "",
@@ -49,16 +49,17 @@ public class ErrorHandlingMiddleware
 
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        var code = HttpStatusCode.InternalServerError;
-        
-        var result = JsonSerializer.Serialize(new { 
-                title = "An error occurred.",                                                                
-                type = "Internal server error.",
-                detail = exception.Message,                
-                status = (int) code,
-                traceId= context.TraceIdentifier
+        HttpStatusCode code = HttpStatusCode.InternalServerError;
+
+        string? result = JsonSerializer.Serialize(new
+        {
+            title = "An error occurred.",
+            type = "Internal server error.",
+            detail = exception.Message,
+            status = (int)code,
+            traceId = context.TraceIdentifier
         });
-        
+
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)code;
 

@@ -17,22 +17,23 @@ namespace Prova1.Application.Helpers.Authentication
                 return false;
             }
         }
-        public static bool IsValidPassword(string password) {
-    
-        var hasNumber = new Regex(@"[0-9]+");
-        var hasLowerChar = new Regex(@"[a-z]+");
-        var hasUpperChar = new Regex(@"[A-Z]+");
-        var hasNonAlphaNum = new Regex(@"\W|_");
-        var hasMinimum8Chars = new Regex(@".{8,}");
+        public static bool IsValidPassword(string password)
+        {
 
-        bool isValidated = 
-        hasNumber.IsMatch(password) && 
-        hasLowerChar.IsMatch(password) &&
-        hasUpperChar.IsMatch(password) && 
-        hasNonAlphaNum.IsMatch(password) &&
-        hasMinimum8Chars.IsMatch(password);
+            Regex? hasNumber = new Regex(@"[0-9]+");
+            Regex? hasLowerChar = new Regex(@"[a-z]+");
+            Regex? hasUpperChar = new Regex(@"[A-Z]+");
+            Regex? hasNonAlphaNum = new Regex(@"\W|_");
+            Regex? hasMinimum8Chars = new Regex(@".{8,}");
 
-        return isValidated;
+            bool isValidated =
+            hasNumber.IsMatch(password) &&
+            hasLowerChar.IsMatch(password) &&
+            hasUpperChar.IsMatch(password) &&
+            hasNonAlphaNum.IsMatch(password) &&
+            hasMinimum8Chars.IsMatch(password);
+
+            return isValidated;
         }
     }
 }

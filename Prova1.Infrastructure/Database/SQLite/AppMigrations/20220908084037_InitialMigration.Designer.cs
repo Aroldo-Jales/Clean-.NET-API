@@ -11,7 +11,7 @@ using Prova1.Infrastructure.Database;
 namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220907175143_InitialMigration")]
+    [Migration("20220908084037_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,6 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Iat")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Token")

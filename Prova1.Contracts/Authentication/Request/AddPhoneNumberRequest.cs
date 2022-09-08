@@ -1,6 +1,6 @@
 namespace Prova1.Contracts.Authentication.Request;
 
-public record AddPhoneNumberRequest(    
+public record AddPhoneNumberRequest(
     string userId,
     string phoneNumber
 );

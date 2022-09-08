@@ -37,7 +37,7 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
                     Created = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Expires = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Device = table.Column<string>(type: "TEXT", nullable: false),
-                    Iat = table.Column<string>(type: "TEXT", nullable: false)
+                    Iat = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

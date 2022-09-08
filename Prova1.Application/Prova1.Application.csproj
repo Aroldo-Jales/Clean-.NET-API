@@ -7,6 +7,12 @@
   </PropertyGroup>  
 
   <ItemGroup>
+    <Compile Remove="Common\NewFolder\**" />
+    <EmbeddedResource Remove="Common\NewFolder\**" />
+    <None Remove="Common\NewFolder\**" />
+  </ItemGroup>  
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="6.0.8" />
   </ItemGroup>

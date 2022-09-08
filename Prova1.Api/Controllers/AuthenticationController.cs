@@ -1,21 +1,22 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Prova1.Application.Common.Interfaces.Services;
 using Prova1.Contracts.Authentication.Request;
 using Prova1.Contracts.Authentication.Response;
-using Prova1.Application.Common.Interfaces.Services;
-using Prova1.Application.Services.Authentication;
+using Prova1.Application.Services.Authentication.Result;
 
-namespace Prova1.Api.Controllers{
+namespace Prova1.Api.Controllers
+{
 
     [ApiController]
     [Route("auth")]
     [AllowAnonymous]
     public class AuthenticationController : ControllerBase
-    {    
+    {
 
         private readonly IAuthenticationService _authenticationService;
 
-        
+
         public AuthenticationController(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
@@ -24,13 +25,13 @@ namespace Prova1.Api.Controllers{
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp(SignUpRequest request)
         {
-            var userInactiveResult = await _authenticationService.SignUp(
-                request.Name,            
-                request.Email,            
+            Application.Services.Authentication.Result.UserStatusResult? userInactiveResult = await _authenticationService.SignUp(
+                request.Name,
+                request.Email,
                 request.Password
             );
 
-            var response = new UserStatusResponse
+            UserStatusResponse? response = new UserStatusResponse
             (
                 userInactiveResult.user.Id,
                 userInactiveResult.user.Name,
@@ -41,20 +42,19 @@ namespace Prova1.Api.Controllers{
             return Ok(response);
         }
 
-        [HttpGet("signin")]   
+        [HttpGet("signin")]
         public async Task<IActionResult> SignIn(SignInRequest request)
         {
-            var authServiceResult = await _authenticationService.SignIn(            
+            AuthenticationResult? authServiceResult = await _authenticationService.SignIn(
                 request.Email,
                 request.Password
             );
 
-            var response = new AuthenticationResponse
+            AuthenticationResponse? response = new AuthenticationResponse
             (
                 authServiceResult.user.Id,
                 authServiceResult.user.Name,
-                authServiceResult.user.Email,
-                authServiceResult.user.PhoneNumber!,            
+                authServiceResult.user.Email,                
                 authServiceResult.AcessToken,
                 authServiceResult.RefreshToken
             );
@@ -62,20 +62,35 @@ namespace Prova1.Api.Controllers{
             return Ok(response);
         }
 
+        [HttpGet("refresh-token")]
+        public ActionResult RefreshToken(RefreshTokenRequest request)
+        {
+            AuthenticationResult? authResult = _authenticationService.RefreshToken(
+                request.RefreshToken,
+                request.AccessToken
+            );
+
+            RefreshTokenResponse? refreshTokenResponse = new RefreshTokenResponse(
+                authResult.RefreshToken,
+                authResult.AcessToken
+            );
+
+            return Ok(refreshTokenResponse);
+        }
+
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
         {
-            var authServiceResult = await _authenticationService.ChangePassword(            
+            AuthenticationResult? authServiceResult = await _authenticationService.ChangePassword(
                 Guid.Parse(request.userId),
                 request.NewPassword
-            );    
+            );
 
-            var response = new AuthenticationResponse
+            AuthenticationResponse? response = new AuthenticationResponse
             (
                 authServiceResult.user.Id,
                 authServiceResult.user.Name,
-                authServiceResult.user.Email,
-                authServiceResult.user.PhoneNumber!,
+                authServiceResult.user.Email,                
                 authServiceResult.AcessToken,
                 authServiceResult.RefreshToken
             );
@@ -85,19 +100,19 @@ namespace Prova1.Api.Controllers{
         [HttpPost("email-confirmation")]
         public async Task<IActionResult> EmailConfirmation(ConfirmationRequest request)
         {
-            var authServiceResult = await _authenticationService.ConfirmEmail(
+            UserStatusResult? authServiceResult = await _authenticationService.ConfirmEmail(
                 Guid.Parse(request.userId),
                 request.code
             );
 
-            var response = new UserStatusResponse
+            UserStatusResponse? response = new UserStatusResponse
             (
                 authServiceResult.user.Id,
                 authServiceResult.user.Name,
                 authServiceResult.user.Email,
                 authServiceResult.user.ActiveAccount
             );
-            
+
             return Ok(response);
         }
 
@@ -108,26 +123,26 @@ namespace Prova1.Api.Controllers{
                 Guid.Parse(request.userId),
                 request.phoneNumber
             );
-            
+
             return Ok("Phonenumber registered for confirmation.");
         }
 
         [HttpPost("phone-number-confirmation")]
         public async Task<IActionResult> PhoneNumberConfirmation(ConfirmationRequest request)
         {
-            var authServiceResult = await _authenticationService.ConfirmPhoneNumber(
+            UserStatusResult? authServiceResult = await _authenticationService.ConfirmPhoneNumber(
                 Guid.Parse(request.userId),
                 request.code
             );
 
-            var response = new UserStatusResponse
+            UserStatusResponse? response = new UserStatusResponse
             (
                 authServiceResult.user.Id,
                 authServiceResult.user.Name,
                 authServiceResult.user.Email,
                 authServiceResult.user.ActiveAccount
             );
-            
+
             return Ok(response);
         }
     }

@@ -4,7 +4,7 @@ namespace Prova1.Domain.Entities.Authentication
 {
     public class RefreshToken
     {
-        [Key]        
+        [Key]
         public int Id { get; set; }
 
         public Guid UserId { get; set; }
@@ -17,10 +17,10 @@ namespace Prova1.Domain.Entities.Authentication
 
         public string Device { get; set; } = null!;
 
-        public string Iat { get; set; } = null!;
+        public string? Iat { get; set; }
 
         public RefreshToken(Guid userId, string token, DateTime created, DateTime expires, string device, string iat)
-        {         
+        {
             UserId = userId;
             Token = token;
             Created = created;

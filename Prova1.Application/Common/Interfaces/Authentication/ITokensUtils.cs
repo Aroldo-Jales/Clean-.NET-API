@@ -8,6 +8,6 @@ namespace Prova1.Application.Common.Interfaces.Authentication
         string GenerateJwtToken(User user, ClaimsPrincipal? claimsPrincipal = null);
         RefreshToken GenerateRefreshToken(User user, ClaimsPrincipal? claimsPrincipal = null);
         Guid? ValidateJwtToken(string token);
-        ClaimsPrincipal ExtractClaimsFromToken(string token);                        
+        ClaimsPrincipal ExtractClaimsFromToken(string token);
     }
 }

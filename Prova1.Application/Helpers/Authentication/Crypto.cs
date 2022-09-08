@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using System.Security.Cryptography;
 using Prova1.Domain.Entities.Authentication;
+using System.Security.Cryptography;
 
 namespace Prova1.Application.Helpers.Authentication
 {
@@ -8,7 +8,7 @@ namespace Prova1.Application.Helpers.Authentication
     {
         public static byte[] GetSalt
         {
-            get 
+            get
             {
                 return RandomNumberGenerator.GetBytes(128 / 8);
             }
@@ -21,7 +21,7 @@ namespace Prova1.Application.Helpers.Authentication
             salt: user.Salt,
             prf: KeyDerivationPrf.HMACSHA256,
             iterationCount: 100000,
-            numBytesRequested: 256/8));
+            numBytesRequested: 256 / 8));
 
             return hashed;
         }

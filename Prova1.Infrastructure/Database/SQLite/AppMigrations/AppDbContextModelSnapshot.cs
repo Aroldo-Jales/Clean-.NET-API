@@ -34,7 +34,6 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Iat")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Token")
