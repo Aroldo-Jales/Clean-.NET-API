@@ -3,9 +3,13 @@ namespace Prova1.Domain.Entities.Authentication
     public class UserValidationCode
     {
         public int Id { get; set; }
+
         public Guid UserId { get; set; }
-        public string Type { get; set; }
+
+        public string Type { get; set; } 
+
         public int Code { get; set; }
+
         public DateTime Expiration { get; set; }
 
         public UserValidationCode(Guid userId, string type)
