@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Prova1.Application.Common.Interfaces.Services;
 using Prova1.Contracts.Authentication.Request;
@@ -10,7 +9,6 @@ namespace Prova1.Api.Controllers
 
     [ApiController]
     [Route("auth")]
-    [AllowAnonymous]
     public class AuthenticationController : ControllerBase
     {
 
@@ -25,7 +23,7 @@ namespace Prova1.Api.Controllers
         [HttpPost("signup")]
         public async Task<IActionResult> SignUp(SignUpRequest request)
         {
-            Application.Services.Authentication.Result.UserStatusResult? userInactiveResult = await _authenticationService.SignUp(
+            UserStatusResult? userInactiveResult = await _authenticationService.SignUp(
                 request.Name,
                 request.Email,
                 request.Password
