@@ -1,15 +1,24 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Prova1.Domain.Entities.Authentication
 {
     public class UserValidationCode
     {
+        [Key]
         public int Id { get; set; }
 
+        [Required]
+        [ForeignKey("User")]
         public Guid UserId { get; set; }
 
+        [Required]
         public string Type { get; set; } 
 
+        [Required]
         public int Code { get; set; }
 
+        [Required]
         public DateTime Expiration { get; set; }
 
         public UserValidationCode(Guid userId, string type)

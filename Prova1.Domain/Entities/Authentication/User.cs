@@ -4,13 +4,6 @@ namespace Prova1.Domain.Entities.Authentication
 {
     public class User
     {
-        // Usuário (id, name, login, telefone, password, conta ativa)
-        public User(string name, string email)
-        {
-            Name = name;
-            Email = email;
-        }
-
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -23,16 +16,22 @@ namespace Prova1.Domain.Entities.Authentication
         [MaxLength(11)]
         public string? PhoneNumber { get; set; }
 
+        [Required]
         public string PasswordHash { get; set; } = null!;
 
         public byte[] Salt { get; set; } = null!;
 
+        [Required]
         public bool ActiveAccount { get; set; } = false;
 
-        public ICollection<RefreshToken>? RefreshTokens { get; set; }
-
+        [Required]
         public int DeviceLimit { get; } = 4;
 
-        public ICollection<UserValidationCode>? UserValidationCodes { get; set; }
+        public User(string name, string email)
+        {
+            Name = name;
+            Email = email;
+        }
+
     }
 }
