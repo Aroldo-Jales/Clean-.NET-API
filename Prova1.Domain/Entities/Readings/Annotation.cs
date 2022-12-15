@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace Prova1.Domain.Entities.Reading
+namespace Prova1.Domain.Entities.Readings
 {
     public class Annotation
     {

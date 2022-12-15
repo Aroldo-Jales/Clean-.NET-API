@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Prova1.Domain.Entities.Authentication;
-using Prova1.Domain.Entities.Reading;
+using Prova1.Domain.Entities.Readings;
 
 namespace Prova1.Infrastructure.Database
 {
@@ -10,7 +10,6 @@ namespace Prova1.Infrastructure.Database
         public DbSet<User>? Users { get; set; }
         public DbSet<UserValidationCode>? UserValidationCodes { get; set; }
         public DbSet<RefreshToken>? RefreshTokens { get; set; }
-
 
         // Reading
         public DbSet<Reading>? Readings { get; set; }
@@ -27,7 +26,7 @@ namespace Prova1.Infrastructure.Database
 
             // FOR MIGRATIONS AND DATABASE UPDATES USE ABSOLUTE PATH
             //
-            optionsBuilder.UseSqlite(connectionString: String.Format(@"DataSource={0}; Cache=Shared", @"C:\Users\pc - 02\Documents\Code\PROGINT2\Prova1\Prova1.Infrastructure\Database\SQLite\Database.db"));
+            optionsBuilder.UseSqlite(connectionString: String.Format(@"DataSource={0}; Cache=Shared", @"C:\Users\Aroldo Jales\Documents\Code\Vscode\IFPI\PROVA1\Prova1\Prova1.Infrastructure\Database\SQLite\Database.db"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

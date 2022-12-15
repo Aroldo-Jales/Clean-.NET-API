@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Prova1.Domain.Entities.Reading
+namespace Prova1.Domain.Entities.Readings
 {
     public class Like
     {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Prova1.Api.Controllers.Read
+namespace Prova1.Api.Controllers.Readings
 {
     [ApiController]
     [Route("readings")]

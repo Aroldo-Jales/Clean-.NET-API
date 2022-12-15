@@ -7,8 +7,11 @@
   </PropertyGroup>  
 
   <ItemGroup>
+    <Compile Remove="Common\Interfaces\Services\Readings\NewFolder\**" />
     <Compile Remove="Common\NewFolder\**" />
+    <EmbeddedResource Remove="Common\Interfaces\Services\Readings\NewFolder\**" />
     <EmbeddedResource Remove="Common\NewFolder\**" />
+    <None Remove="Common\Interfaces\Services\Readings\NewFolder\**" />
     <None Remove="Common\NewFolder\**" />
   </ItemGroup>  
 
@@ -23,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\Interfaces\Services\Readings\" />
     <Folder Include="Services\Readings\" />
   </ItemGroup>
   
