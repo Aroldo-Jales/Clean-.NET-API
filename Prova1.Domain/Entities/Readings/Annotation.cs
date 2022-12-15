@@ -9,19 +9,12 @@ namespace Prova1.Domain.Entities.Readings
         public int Id { get; set; }
 
         [ForeignKey("Reading")]
-        public int ReadingId { get; set; }
+        public Guid ReadingId { get; set; }
 
         [Required]
         public string Content { get; set; } = null!;
 
         [Required]
         public int Page { get; set; }
-
-        public Annotation(int readingId, string content, int page)
-        {            
-            ReadingId = readingId;
-            Content = content;
-            Page = page;
-        }
     }
 }

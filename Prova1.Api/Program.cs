@@ -10,6 +10,7 @@ WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
         .AddInfrastructure(builder.Configuration);
 
     builder.Services.AddControllers();
+    //builder.Services.AddHttpContextAccessor();
 }
 
 WebApplication? app = builder.Build();
