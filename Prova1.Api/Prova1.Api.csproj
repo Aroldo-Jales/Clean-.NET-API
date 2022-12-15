@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
@@ -11,5 +10,4 @@
     <ProjectReference Include="..\Prova1.Contracts\Prova1.Contracts.csproj" />
     <ProjectReference Include="..\Prova1.Infrastructure\Prova1.Infrastructure.csproj" />
   </ItemGroup>
-
 </Project>

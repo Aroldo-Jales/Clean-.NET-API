@@ -2,7 +2,7 @@
 
 namespace Prova1.Application.Common.Errors.Authentication;
 
-public class DuplicatePhoneNumberInvalidCredentialsException : Exception, IServiceException
+public class DuplicatePhoneNumberInvalidCredentialsException : Exception, IExceptionBase
 {
     public HttpStatusCode StatusCode => HttpStatusCode.Conflict;
 

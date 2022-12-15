@@ -1,9 +1,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Prova1.Application.Common.Interfaces.Authentication;
-using Prova1.Application.Common.Interfaces.Persistence;
+using Prova1.Application.Common.Interfaces.Utils.Authentication;
+using Prova1.Application.Common.Interfaces.Persistence.Authentication;
 using Prova1.Application.Common.Interfaces.Services;
+using Prova1.Infrastructure.Authentication.Utils;
 using Prova1.Infrastructure.Authentication;
 using Prova1.Infrastructure.Database;
 using Prova1.Infrastructure.Repositories;

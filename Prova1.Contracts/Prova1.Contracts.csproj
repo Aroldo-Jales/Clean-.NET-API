@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Readings\" />
+    <Compile Remove="Readings\**" />
+    <EmbeddedResource Remove="Readings\**" />
+    <None Remove="Readings\**" />
   </ItemGroup>
 
 </Project>

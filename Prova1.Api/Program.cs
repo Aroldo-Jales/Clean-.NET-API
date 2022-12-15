@@ -1,3 +1,4 @@
+using Prova1.Api.Middlewares.Authentication;
 using Prova1.Api.Middlewares;
 using Prova1.Application.Services.Authentication;
 using Prova1.Infrastructure;

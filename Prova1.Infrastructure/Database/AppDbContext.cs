@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Prova1.Domain.Entities.Authentication;
 using Prova1.Domain.Entities.Reading;
-using Prova1.Infrastructure.Database.Helpers;
+
 namespace Prova1.Infrastructure.Database
 {
     public class AppDbContext : DbContext

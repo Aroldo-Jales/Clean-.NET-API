@@ -2,7 +2,7 @@
 
 namespace Prova1.Application.Common.Errors.Authentication
 {
-    public class InvalidCredentialsException : Exception, IServiceException
+    public class InvalidCredentialsException : Exception, IExceptionBase
     {
         public HttpStatusCode StatusCode => HttpStatusCode.Unauthorized;
 
