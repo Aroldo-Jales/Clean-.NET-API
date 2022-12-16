@@ -31,7 +31,15 @@ namespace Prova1.Api.Controllers.Readings
             _annotationsQueryService = annotationsQueryService;
         }
 
-        [HttpPost("add-reading")]
+        [HttpGet("all")]
+        public async Task<IActionResult> ListAllReadingsAsync()
+        {
+            var readings = await _readingsQueryService.AllReadingsAsync(10);
+
+            return Ok(JsonSerializer.Serialize(readings));
+        }
+
+        [HttpPost("add")]
         public async Task<IActionResult> AddReading(ReadingRequest request)
         {
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -48,29 +56,6 @@ namespace Prova1.Api.Controllers.Readings
             await _readingsCommandService.AddReadingAsync(reading);
 
             return Ok(request);
-        }
-
-        [HttpGet("all")]
-        public async Task<IActionResult> ListAllReadingsAsync()
-        {
-            var readings = await _readingsQueryService.AllReadingsAsync(10);
-
-            return Ok(JsonSerializer.Serialize(readings));
-        }
-
-        [HttpDelete("remove/{id}")]
-        public async Task<IActionResult> RemoveReading(Guid id)
-        {
-            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (await _readingsQueryService.GetReadingById(id) is not Reading reading || reading.UserId != new Guid(userId))
-            {
-                return NotFound();
-            }
-
-            await _readingsCommandService.RemoveReadingAsync(id);
-
-            return StatusCode(204);
         }
 
         [HttpPut("update-reading-page/{id}/{page}")]
@@ -96,6 +81,63 @@ namespace Prova1.Api.Controllers.Readings
             );
 
             return Ok(readingResponse);            
+        }
+
+        [HttpPut("stopped-reading/{id}/{stopped}")]
+        public async Task<IActionResult> StopReading(Guid id, bool stopped)
+        {
+            if (await _readingsQueryService.GetReadingById(id) is not Reading reading)
+            {
+                return NotFound();
+            }
+
+            reading.Stopped = stopped;
+            var updatedReading = await _readingsCommandService.UpdateReadingAsync(reading);
+
+            return Ok(JsonSerializer.Serialize(updatedReading));
+        }
+
+        [HttpPut("finish-reading/{id}/{finished}")]
+        public async Task<IActionResult> FinishReading(Guid id, bool finished)
+        {
+            if (await _readingsQueryService.GetReadingById(id) is not Reading reading)
+            {
+                return NotFound();
+            }
+
+            reading.Completed = finished;
+            var updatedReading = await _readingsCommandService.UpdateReadingAsync(reading);
+
+            return Ok(JsonSerializer.Serialize(updatedReading));
+        }
+
+        [HttpDelete("remove/{id}")]
+        public async Task<IActionResult> RemoveReading(Guid id)
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (await _readingsQueryService.GetReadingById(id) is not Reading reading || reading.UserId != new Guid(userId))
+            {
+                return NotFound();
+            }
+
+            await _readingsCommandService.RemoveReadingAsync(id);
+
+            return StatusCode(204);
+        }
+
+
+        [HttpGet("annotations/{id}")]
+        public async Task<IActionResult> AnnotationsByReadingAsync(Guid id)
+        {
+            if (await _readingsQueryService.GetReadingById(id) is not Reading reading)
+            {
+                return NotFound();
+            }
+
+            var annotations = await _annotationsQueryService.GetAllAnnotionsByReading(reading.Id);
+
+            return Ok(JsonSerializer.Serialize(annotations));
         }
 
         [HttpPost("add-annotation/{id}")]
@@ -136,47 +178,44 @@ namespace Prova1.Api.Controllers.Readings
             var updatedAnnotation = await _annotationsCommandService.UpdateAnnotationAsync(annotation); 
 
             return Ok(JsonSerializer.Serialize(updatedAnnotation));
-        }   
-
-        [HttpGet("annotations/{id}")]
-        public async Task<IActionResult> AnnotationsByReadingAsync(Guid id)
-        {
-            if (await _readingsQueryService.GetReadingById(id) is not Reading reading)
-            {
-                return NotFound();
-            }
-
-            var annotations = await _annotationsQueryService.GetAllAnnotionsByReading(reading.Id);
-
-            return Ok(JsonSerializer.Serialize(annotations));
         }
 
-        [HttpPut("stopped-reading/{id}/{stopped}")]
-        public async Task<IActionResult> StopReading(Guid id, bool stopped)
+        [HttpDelete("remove-annotation/{id}")]
+        public async Task<IActionResult> RemoveAnnotationAsync(Guid id)
         {
-            if (await _readingsQueryService.GetReadingById(id) is not Reading reading)
-            {
-                return NotFound();
-            }
-
-            reading.Stopped = stopped;
-            var updatedReading = await _readingsCommandService.UpdateReadingAsync(reading);
-
-            return Ok(JsonSerializer.Serialize(updatedReading));
+            throw new NotImplementedException();
         }
 
-        [HttpPut("finish-reading/{id}/{finished}")]
-        public async Task<IActionResult> FinishReading(Guid id, bool finished)
+
+        [HttpPost("add-comment/{id}")]
+        public async Task<IActionResult> AddComment()
         {
-            if (await _readingsQueryService.GetReadingById(id) is not Reading reading)
-            {
-                return NotFound();
-            }
+            throw new NotImplementedException();
+        }
 
-            reading.Completed = finished;
-            var updatedReading = await _readingsCommandService.UpdateReadingAsync(reading);
+        [HttpPut("update-comment/{id}")]
+        public async Task<IActionResult> UpdateComment()
+        {
+            throw new NotImplementedException();
+        }
 
-            return Ok(JsonSerializer.Serialize(updatedReading));
+        [HttpDelete("remove-comment/{id}")]
+        public async Task<IActionResult> RemoveComment()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        [HttpPost("add-like/{id}")]
+        public async Task<IActionResult> AddLike()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpDelete("remove-like/{id}")]
+        public async Task<IActionResult> RemoveLike()
+        {
+            throw new NotImplementedException();
         }
     }
 }

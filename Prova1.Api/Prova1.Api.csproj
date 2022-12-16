@@ -4,6 +4,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Controllers\BaseController.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Prova1.Application\Prova1.Application.csproj" />
