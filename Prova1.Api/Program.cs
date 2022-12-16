@@ -23,7 +23,6 @@ WebApplication? app = builder.Build();
     app.UseWhen(context => context.Request.Path.StartsWithSegments("/readings"), appBuilder =>
     {
         appBuilder.UseMiddleware<AuthMiddleware>();
-
     });
 
     app.MapControllers();

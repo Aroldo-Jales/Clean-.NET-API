@@ -15,8 +15,8 @@ namespace Prova1.Infrastructure.Repositories
         }
 
         public async Task Add(RefreshToken rf)
-        {// se nao existir no banco adiciona o token se existir atualiza.            
-
+        {
+            // se nao existir no banco adiciona o token se existir atualiza.            
             // posteriormente alterar para mais dispositivos podendo ter mais de um token por usuario
 
             if(await _dbcontext.RefreshTokens!.Where(r => r.UserId == rf.UserId).AnyAsync())
@@ -34,7 +34,6 @@ namespace Prova1.Infrastructure.Repositories
         {
             RefreshToken updateRefreshToken = (await _dbcontext.RefreshTokens!.Where(r => r.UserId == rf.UserId).SingleOrDefaultAsync())!;
 
-            // MUTABLES
             updateRefreshToken.Token = rf.Token;
             updateRefreshToken.Created = rf.Created;
             updateRefreshToken.Expires = rf.Expires;

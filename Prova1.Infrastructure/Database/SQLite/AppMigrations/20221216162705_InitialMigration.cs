@@ -13,9 +13,8 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
                 name: "Annotations",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    ReadingId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ReadingId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Content = table.Column<string>(type: "TEXT", nullable: false),
                     Page = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -28,10 +27,9 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
                 name: "Commentaries",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ReadingId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ReadingId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Content = table.Column<string>(type: "TEXT", maxLength: 500, nullable: false)
                 },
                 constraints: table =>
@@ -43,10 +41,9 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
                 name: "Likes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    ReadingId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ReadingId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,9 +93,7 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
-                    Description = table.Column<string>(type: "TEXT", nullable: false),
-                    stopped = table.Column<bool>(type: "INTEGER", nullable: false),
-                    completed = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Description = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

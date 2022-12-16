@@ -5,8 +5,15 @@ namespace Prova1.Domain.Entities.Readings
 {
     public class Annotation
     {
+        public Annotation(Guid readingId, string content, int page)
+        {
+            ReadingId = readingId;
+            Content = content;
+            Page = page;
+        }
+
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [ForeignKey("Reading")]
         public Guid ReadingId { get; set; }

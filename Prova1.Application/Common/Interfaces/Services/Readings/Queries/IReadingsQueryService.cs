@@ -9,8 +9,8 @@ namespace Prova1.Application.Common.Interfaces.Services.Readings.Queries
 {
     public interface IReadingsQueryService
     {
+        Task<Reading> GetReadingById(Guid id);
         Task<List<Reading>> AllReadingsAsync(int count);
-
         Task<List<Reading>> AllReadingsByUserAsync(Guid userId);
     }
 }

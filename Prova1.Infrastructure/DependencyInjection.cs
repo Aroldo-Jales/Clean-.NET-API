@@ -9,6 +9,8 @@ using Prova1.Infrastructure.Authentication;
 using Prova1.Infrastructure.Database;
 using Prova1.Infrastructure.Repositories;
 using Prova1.Infrastructure.Services;
+using Prova1.Application.Common.Interfaces.Persistence.Readings;
+using Prova1.Infrastructure.Repositories.Readings;
 
 namespace Prova1.Infrastructure;
 public static class DependencyInjection
@@ -23,7 +25,11 @@ public static class DependencyInjection
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-        services.AddScoped<IUserValidationCodeRepository, UserValidationCodeRepository>();        
+        services.AddScoped<IUserValidationCodeRepository, UserValidationCodeRepository>();
+        services.AddScoped<IReadingsRepository, ReadingsRepository>();
+        services.AddScoped<ILikeRepository, LikeRepository>();
+        services.AddScoped<ICommentaryRepository, CommentaryRepository>();
+        services.AddScoped<IAnnotationsRepository, AnnotationsRepository>();
 
         return services;
     }

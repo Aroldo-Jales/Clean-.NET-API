@@ -1,17 +1,13 @@
 ﻿using Prova1.Domain.Entities.Readings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Prova1.Application.Common.Interfaces.Persistence.Readings
 {
     public interface IAnnotationsRepository
     {
-        Task<Annotation> AddAnnotationAsync();
-        Task<Annotation> UpdateAnnotationAsync();
-        Task RemoveAnnotationAsync();
+        Task<Annotation> GetAnnotationById(Guid id);
         Task<List<Annotation>> GetAllAnnotionsByReading(Guid readingId);
+        Task<Annotation> AddAnnotationAsync(Annotation annotation);
+        Task<Annotation> UpdateAnnotationAsync(Annotation annotation);
+        Task RemoveAnnotationAsync(Guid id);        
     }
 }

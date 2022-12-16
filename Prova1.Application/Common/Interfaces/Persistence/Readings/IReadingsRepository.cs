@@ -4,11 +4,11 @@ namespace Prova1.Application.Common.Interfaces.Persistence.Readings
 {
     public interface IReadingsRepository
     {
-        Task<Reading> GetReadingByAsync(Guid readingId);
-        Task AddReadingAsync(Reading reading);        
-        Task RemoveReadingAsync(Reading reading);
+        Task<Reading> GetReadingByIdAsync(Guid readingId);
+        Task<List<Reading>> GetAllReadingsAsync(int count);
+        Task<List<Reading>> GetReadingsByUserAsync(Guid userId);
+        Task<Reading> AddReadingAsync(Reading reading);                
         Task<Reading> UpdateReadingAsync(Reading reading);
-        Task<List<Reading>> AllReadingsAsync(int count);
-        Task<List<Reading>> AllReadingsByUserAsync(Guid userId);        
+        Task RemoveReadingAsync(Guid readingId);
     }
 }

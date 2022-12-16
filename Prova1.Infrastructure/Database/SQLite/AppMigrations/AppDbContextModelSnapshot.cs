@@ -109,11 +109,11 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
                     b.ToTable("UserValidationCodes");
                 });
 
-            modelBuilder.Entity("Prova1.Domain.Entities.Reading.Annotation", b =>
+            modelBuilder.Entity("Prova1.Domain.Entities.Readings.Annotation", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -122,27 +122,27 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
                     b.Property<int>("Page")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ReadingId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("ReadingId")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("Annotations");
                 });
 
-            modelBuilder.Entity("Prova1.Domain.Entities.Reading.Commentary", b =>
+            modelBuilder.Entity("Prova1.Domain.Entities.Readings.Commentary", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ReadingId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("ReadingId")
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
@@ -152,14 +152,14 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
                     b.ToTable("Commentaries");
                 });
 
-            modelBuilder.Entity("Prova1.Domain.Entities.Reading.Like", b =>
+            modelBuilder.Entity("Prova1.Domain.Entities.Readings.Like", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("ReadingId")
-                        .HasColumnType("INTEGER");
+                    b.Property<Guid>("ReadingId")
+                        .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
@@ -169,7 +169,7 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
                     b.ToTable("Likes");
                 });
 
-            modelBuilder.Entity("Prova1.Domain.Entities.Reading.Reading", b =>
+            modelBuilder.Entity("Prova1.Domain.Entities.Readings.Reading", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -205,7 +205,7 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
                     b.ToTable("Readings");
                 });
 
-            modelBuilder.Entity("Prova1.Domain.Entities.Reading.Tag", b =>
+            modelBuilder.Entity("Prova1.Domain.Entities.Readings.Tag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -218,12 +218,6 @@ namespace Prova1.Infrastructure.Database.SQLite.AppMigrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("completed")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("stopped")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

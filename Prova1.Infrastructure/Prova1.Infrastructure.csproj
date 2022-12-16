@@ -23,5 +23,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Prova1.Application\Prova1.Application.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Database\SQLite\AppMigrations\" />
+  </ItemGroup>
   
 </Project>

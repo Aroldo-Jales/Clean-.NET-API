@@ -24,9 +24,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Prova1.Domain\Prova1.Domain.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\Readings\" />
-  </ItemGroup>
   
 </Project>

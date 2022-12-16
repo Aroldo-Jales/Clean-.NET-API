@@ -5,8 +5,19 @@ namespace Prova1.Domain.Entities.Readings
 {
     public class Commentary
     {
+        public Commentary()
+        {
+        }
+
+        public Commentary(Guid userId, Guid readingId, string content)
+        {
+            UserId = userId;
+            ReadingId = readingId;
+            Content = content;
+        }
+
         [Key]
-        public int Id;
+        public Guid Id = Guid.NewGuid();
 
         [Required]
         [ForeignKey("User")]
@@ -14,16 +25,10 @@ namespace Prova1.Domain.Entities.Readings
 
         [Required]
         [ForeignKey("Reading")]
-        public int ReadingId { get; set; }
+        public Guid ReadingId { get; set; }
 
         [Required]
         [MaxLength(500)]
         public string Content { get; set; } = null!;
-
-        public Commentary(Guid userId, string content)
-        {
-            UserId = userId;
-            Content = content;
-        }
     }
 }

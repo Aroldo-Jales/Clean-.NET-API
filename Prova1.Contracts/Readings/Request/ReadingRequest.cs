@@ -3,8 +3,7 @@ namespace Prova1.Contracts.Readings.Request;
     public record ReadingRequest
     (
         string Title,
-        string SubTitle,
-        int TagId,
+        string SubTitle,        
         bool Stopped,
         bool Completed,
         int CurrentPage

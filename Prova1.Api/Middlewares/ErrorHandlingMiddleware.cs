@@ -1,3 +1,4 @@
+using Prova1.Application.Common.Errors;
 using System.Net;
 using System.Text.Json;
 
@@ -55,7 +56,7 @@ public class ErrorHandlingMiddleware
         {
             title = "An error occurred.",
             type = "Internal server error.",
-            detail = exception.Message,
+            detail = exception is IExceptionBase ? ((IExceptionBase)exception).ErrorMessage : string.Empty,
             status = (int)code,
             traceId = context.TraceIdentifier
         });

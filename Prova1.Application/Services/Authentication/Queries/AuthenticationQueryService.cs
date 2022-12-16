@@ -65,8 +65,6 @@ namespace Prova1.Application.Services.Authentication.Queries
 
         public async Task<UserStatusResult> ConfirmEmail(Guid userId, int code)
         {
-            // Refatorar validacao em service 
-    
             if (await _userValidationCodeRepository.GetEmailValidationCodeByUser((await _userRepository.GetUserById(userId))!) is not UserValidationCode uv) {
                 throw new Exception("This confirmation not exists.");
             }

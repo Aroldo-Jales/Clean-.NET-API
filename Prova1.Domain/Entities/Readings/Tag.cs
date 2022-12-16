@@ -12,17 +12,5 @@ namespace Prova1.Domain.Entities.Readings
 
         [Required]
         public string Description { get; set; }
-
-        [Required]
-        public bool stopped { get; set; } = false;
-
-        [Required]
-        public bool completed { get; set; } = true;
-
-        public Tag(string name, string description)
-        {            
-            Name = name;
-            Description = description;
-        }
     }
 }

@@ -4,6 +4,6 @@ POST {{host}}/auth/add-phone-number
 Content-Type: application/json
 
 {    
-    "userId": "",
-    "phoneNumber": ""
+    "userId": "69F3D2BB-04F5-4E7C-B6A6-3A3C56D2CDB7",
+    "phoneNumber": "86981227791"
 }

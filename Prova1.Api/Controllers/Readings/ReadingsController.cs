@@ -1,6 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Prova1.Application.Common.Interfaces.Services.Readings.Commands;
+using Prova1.Application.Common.Interfaces.Services.Readings.Queries;
 using Prova1.Contracts.Readings.Request;
+using Prova1.Contracts.Readings.Response;
+using Prova1.Domain.Entities.Readings;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Prova1.Api.Controllers.Readings
 {
@@ -8,60 +13,170 @@ namespace Prova1.Api.Controllers.Readings
     [Route("readings")]
     public class ReadingsController : Controller
     {
-        
+        private readonly IReadingsCommandService _readingsCommandService;
+        private readonly IReadingsQueryService _readingsQueryService;
+
+        private readonly IAnnotationsCommandService _annotationsCommandService;
+        private readonly IAnnotationsQueryService _annotationsQueryService;
+
+        public ReadingsController(
+            IReadingsCommandService readingsCommandService, 
+            IReadingsQueryService readingsQueryService,
+            IAnnotationsCommandService annotationsCommandService,
+            IAnnotationsQueryService annotationsQueryService)
+        {            
+            _readingsCommandService = readingsCommandService;
+            _readingsQueryService = readingsQueryService;
+            _annotationsCommandService = annotationsCommandService;
+            _annotationsQueryService = annotationsQueryService;
+        }
+
         [HttpPost("add-reading")]
-        public IActionResult AddReading(ReadingRequest request)
+        public async Task<IActionResult> AddReading(ReadingRequest request)
         {
-            throw new NotImplementedException();
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            Reading reading = new Reading(
+                new Guid(userId),
+                request.Title,
+                request.SubTitle,
+                request.Stopped,
+                request.Completed,
+                request.CurrentPage
+            );
+
+            await _readingsCommandService.AddReadingAsync(reading);
+
+            return Ok(request);
         }
 
         [HttpGet("all")]
-        public IActionResult ListAllReadings()
+        public async Task<IActionResult> ListAllReadingsAsync()
         {
-            return Ok();
+            var readings = await _readingsQueryService.AllReadingsAsync(10);
+
+            return Ok(JsonSerializer.Serialize(readings));
         }
 
-        [HttpGet("{id}")]
-        public IActionResult RemoveReading(Guid id)
+        [HttpDelete("remove/{id}")]
+        public async Task<IActionResult> RemoveReading(Guid id)
         {
-            return Ok();
-        }
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+            if (await _readingsQueryService.GetReadingById(id) is not Reading reading || reading.UserId != new Guid(userId))
+            {
+                return NotFound();
+            }
+
+            await _readingsCommandService.RemoveReadingAsync(id);
+
+            return StatusCode(204);
+        }
 
         [HttpPut("update-reading-page/{id}/{page}")]
-        public IActionResult UpdateReadingPage(Guid id, int page)
+        public async Task<IActionResult> UpdateReadingPage(Guid id, int page)
         {
-            throw new NotImplementedException();
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (await _readingsQueryService.GetReadingById(id) is not Reading reading || reading.UserId != new Guid(userId))
+            {
+                return NotFound();
+            }
+            
+            reading.CurrentPage = page;
+
+            await _readingsCommandService.UpdateReadingAsync(reading);
+
+            ReadingResponse readingResponse = new ReadingResponse(
+                reading.Title,
+                reading.SubTitle,
+                reading.Stopped,
+                reading.Completed,
+                reading.CurrentPage
+            );
+
+            return Ok(readingResponse);            
         }
 
         [HttpPost("add-annotation/{id}")]
-        public IActionResult AddAnnotation(AnnotationRequest request, Guid id)
+        public async Task<IActionResult> AddAnnotation(Guid id, [FromBody] AnnotationRequest request)
         {
-            throw new NotImplementedException();
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (await _readingsQueryService.GetReadingById(id) is not Reading reading || reading.UserId != new Guid(userId))
+            {
+                return NotFound();
+            }
+
+            Annotation annotation = new Annotation(
+                id,
+                request.Content,
+                request.Page
+            );
+
+            var addedAnnotation = await _annotationsCommandService.AddAnnotationAsync(annotation);
+
+            return Ok(JsonSerializer.Serialize(addedAnnotation));            
         }
 
         [HttpPost("update-annotation/{id}")]
-        public IActionResult UpdateAnnotation(AnnotationRequest request, Guid id)
+        public async Task<IActionResult> UpdateAnnotationAsync(Guid id, [FromBody] AnnotationRequest request)
         {
-            throw new NotImplementedException();
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (await _annotationsQueryService.GetAnnotationById(id) is not Annotation annotation || 
+                _readingsQueryService.GetReadingById(annotation.ReadingId).Result.UserId != new Guid(userId))
+            {
+                return NotFound();
+            }
+
+            annotation.Content = request.Content;
+            annotation.Page = request.Page;
+
+            var updatedAnnotation = await _annotationsCommandService.UpdateAnnotationAsync(annotation); 
+
+            return Ok(JsonSerializer.Serialize(updatedAnnotation));
         }   
 
         [HttpGet("annotations/{id}")]
-        public IActionResult AnnotationsByReading(Guid id)
+        public async Task<IActionResult> AnnotationsByReadingAsync(Guid id)
         {
-            throw new NotImplementedException();
+            if (await _readingsQueryService.GetReadingById(id) is not Reading reading)
+            {
+                return NotFound();
+            }
+
+            var annotations = await _annotationsQueryService.GetAllAnnotionsByReading(reading.Id);
+
+            return Ok(JsonSerializer.Serialize(annotations));
         }
 
-        [HttpPut("stop-reading/{id}")]
-        public IActionResult StopReading(Guid id)
+        [HttpPut("stopped-reading/{id}/{stopped}")]
+        public async Task<IActionResult> StopReading(Guid id, bool stopped)
         {
-            throw new NotImplementedException();
+            if (await _readingsQueryService.GetReadingById(id) is not Reading reading)
+            {
+                return NotFound();
+            }
+
+            reading.Stopped = stopped;
+            var updatedReading = await _readingsCommandService.UpdateReadingAsync(reading);
+
+            return Ok(JsonSerializer.Serialize(updatedReading));
         }
 
-        [HttpPut("finish-reading/{id}")]
-        public IActionResult FinishReading(Guid id)
+        [HttpPut("finish-reading/{id}/{finished}")]
+        public async Task<IActionResult> FinishReading(Guid id, bool finished)
         {
-            throw new NotImplementedException();
-        }        
+            if (await _readingsQueryService.GetReadingById(id) is not Reading reading)
+            {
+                return NotFound();
+            }
+
+            reading.Completed = finished;
+            var updatedReading = await _readingsCommandService.UpdateReadingAsync(reading);
+
+            return Ok(JsonSerializer.Serialize(updatedReading));
+        }
     }
 }

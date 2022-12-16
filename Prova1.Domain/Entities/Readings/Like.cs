@@ -5,19 +5,23 @@ namespace Prova1.Domain.Entities.Readings
 {
     public class Like
     {
+        public Like()
+        {
+        }
+
+        public Like(Guid userId, Guid readingId)
+        {
+            UserId = userId;
+            ReadingId = readingId;
+        }
+
         [Key]        
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [ForeignKey("User")]
         public Guid UserId { get; set; }
 
         [ForeignKey("Reading")]
-        public int ReadingId { get; set; }
-
-        public Like(Guid userId, int readingId)
-        {            
-            UserId = userId;
-            ReadingId = readingId;
-        }
+        public Guid ReadingId { get; set; }
     }
 }

@@ -4,6 +4,6 @@ POST {{host}}/auth/email-confirmation
 Content-Type: application/json
 
 {    
-    "userId": "",
-    "code": ""
+    "userId": "69F3D2BB-04F5-4E7C-B6A6-3A3C56D2CDB7",
+    "code": "459289"
 }
